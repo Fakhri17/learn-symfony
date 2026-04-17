@@ -8,8 +8,11 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
+{% set full_name = first_name ~ " " ~ last_name %}
+
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
+    <p>Your full name is: {{ full_name }}</p>
 
 
     This friendly message is coming from:
