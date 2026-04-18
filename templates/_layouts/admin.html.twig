@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Admin Panel{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🛠️</text></svg>">
+        
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+        
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    </head>
+    <body class="bg-[#f4f4f0] text-black min-h-screen flex font-['Space_Grotesk']" style="font-family: 'Space Grotesk', sans-serif;">
+        
+        <!-- Sidebar -->
+        <aside class="w-72 bg-white border-r-4 border-black flex flex-col sticky top-0 h-screen overflow-y-auto z-40">
+            <div class="p-6 border-b-4 border-black flex items-center gap-3 bg-yellow-300">
+                <span class="text-3xl">🛠️</span>
+                <h1 class="text-2xl font-black uppercase tracking-tighter">Admin<br>Panel</h1>
+            </div>
+            
+            <nav class="flex-grow p-6 space-y-4">
+                <p class="font-black uppercase text-xs text-gray-500 tracking-widest mb-2">Main Menu</p>
+                <a href="{{ path('admin_dashboard') }}" class="flex items-center gap-3 p-3 font-black uppercase text-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
+                    <span>🏠</span> Dashboard
+                </a>
+                
+                <p class="font-black uppercase text-xs text-gray-500 tracking-widest mt-8 mb-2">Content</p>
+                <a href="#" class="flex items-center gap-3 p-3 font-black uppercase text-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
+                    <span>📝</span> All Posts
+                </a>
+                <a href="#" class="flex items-center gap-3 p-3 font-black uppercase text-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
+                    <span>📁</span> Categories
+                </a>
+                
+                <p class="font-black uppercase text-xs text-gray-500 tracking-widest mt-8 mb-2">System</p>
+                <a href="#" class="flex items-center gap-3 p-3 font-black uppercase text-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
+                    <span>👥</span> Users
+                </a>
+                <a href="#" class="flex items-center gap-3 p-3 font-black uppercase text-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
+                    <span>⚙️</span> Settings
+                </a>
+            </nav>
+
+            <div class="p-6 mt-auto border-t-4 border-black">
+                <a href="/" class="block text-center font-black uppercase border-b-2 border-black hover:bg-yellow-300 transition-colors">← Public Site</a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-grow flex flex-col min-h-screen">
+            <!-- Navbar -->
+            <header class="h-20 bg-white border-b-4 border-black sticky top-0 flex items-center justify-between px-8 z-30">
+                <div class="flex items-center gap-4">
+                    <button class="md:hidden p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                        ☰
+                    </button>
+                    <h2 class="font-black text-xl uppercase italic">{% block page_title %}Dashboard{% endblock %}</h2>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:flex flex-col items-end">
+                        <span class="font-black uppercase leading-none">{{ app.user.name }}</span>
+                        <span class="text-xs font-bold text-gray-600 uppercase">Administrator</span>
+                    </div>
+                    <div class="w-12 h-12 bg-lime-300 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-black text-xl uppercase">
+                        {{ app.user.name|slice(0, 1) }}
+                    </div>
+                    <a href="{{ path('admin_logout') }}" class="bg-pink-400 border-2 border-black font-black uppercase px-4 py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all text-sm">
+                        Logout
+                    </a>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="p-8 flex-grow">
+                {% block body %}{% endblock %}
+            </main>
+
+            <!-- Admin Footer -->
+            <footer class="p-6 border-t-4 border-black bg-white flex justify-between items-center text-sm font-bold uppercase">
+                <p>© {{ 'now'|date('Y') }} Admin Panel v1.0</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:underline">Documentation</a>
+                    <a href="#" class="hover:underline">Support</a>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>
