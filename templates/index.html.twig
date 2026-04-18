@@ -1,17 +1,83 @@
-{% extends 'base.html.twig' %}
+{% extends '_layouts/base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Blog Home - Neobrutalism{% endblock %}
 
 {% block body %}
+    <header class="mb-16 border-4 border-black bg-lime-300 p-8 md:p-16 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+        <div class="relative z-10">
+            <h1 class="text-5xl md:text-7xl font-black uppercase mb-4 tracking-tighter">Stay Loud.<br>Stay Bold.</h1>
+            <p class="text-xl font-bold mb-8 max-w-2xl bg-white border-2 border-black inline-block p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">Read our latest articles on web design, technology, and everything in between. Unapologetic opinions and unapologetic design.</p>
+            <br>
+            <a href="#" class="inline-block bg-white text-black border-4 border-black font-black uppercase px-8 py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all text-xl mt-4">
+                Read the latest
+            </a>
+        </div>
+        <!-- Decorative elements -->
+        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-pink-400 border-4 border-black rounded-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hidden md:block"></div>
+        <div class="absolute top-10 right-32 w-20 h-20 bg-yellow-300 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rotate-12 hidden md:block"></div>
+    </header>
 
-<div class="example-wrapper">
-	<h1>Hello {{ controller_name }}! ✅</h1>
-	<h1 class="text-3xl font-bold underline mb-5">Hello world!</h1>
+    <div class="flex justify-between items-center mb-10 border-b-4 border-black pb-4">
+        <h2 class="text-4xl font-black uppercase">Recent Posts</h2>
+        <a href="#" class="font-black border-4 border-black hover:bg-yellow-300 px-6 py-2 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all uppercase">View All</a>
+    </div>
 
-	This friendly message is coming from:
-	<ul>
-		<li>Your controller at <code>C:/laragon/www/learn-symfony/src/Controller/HomeController.php</code></li>
-		<li>Your template at <code>C:/laragon/www/learn-symfony/templates/home/index.html.twig</code></li>
-	</ul>
-</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Blog Post Card 1 -->
+        <article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex flex-col h-full group">
+            <span class="self-start inline-block bg-pink-300 border-2 border-black px-3 py-1 font-black text-sm uppercase mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">Technology</span>
+            <h3 class="text-3xl font-black uppercase mb-4 group-hover:underline decoration-4 decoration-pink-400"><a href="#">Why Neobrutalism is the Future of UI</a></h3>
+            <p class="font-bold mb-6 text-gray-800 flex-grow text-lg">Tired of clean and boring design? We explore why hard lines and bright colors are making a comeback in a big way.</p>
+            <div class="flex items-center gap-4 mt-auto pt-6 border-t-4 border-black">
+                <div class="w-14 h-14 bg-indigo-400 border-2 border-black rounded-full shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-black text-xl">JD</div>
+                <div class="font-black">
+                    <p class="text-lg text-black">John Doe</p>
+                    <p class="text-sm text-gray-600">Apr 18, 2026</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Blog Post Card 2 -->
+        <article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex flex-col h-full group">
+            <span class="self-start inline-block bg-yellow-300 border-2 border-black px-3 py-1 font-black text-sm uppercase mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">Design</span>
+            <h3 class="text-3xl font-black uppercase mb-4 group-hover:underline decoration-4 decoration-yellow-400"><a href="#">Stop Using Tailwind (Just Kidding)</a></h3>
+            <p class="font-bold mb-6 text-gray-800 flex-grow text-lg">A look back at CSS history and how utility-first frameworks have completely changed the way we build interfaces.</p>
+            <div class="flex items-center gap-4 mt-auto pt-6 border-t-4 border-black">
+                <div class="w-14 h-14 bg-green-400 border-2 border-black rounded-full shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-black text-xl">SM</div>
+                <div class="font-black">
+                    <p class="text-lg text-black">Sarah Miller</p>
+                    <p class="text-sm text-gray-600">Apr 15, 2026</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Blog Post Card 3 -->
+        <article class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex flex-col h-full group">
+            <span class="self-start inline-block bg-indigo-300 border-2 border-black px-3 py-1 font-black text-sm uppercase mb-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">Career</span>
+            <h3 class="text-3xl font-black uppercase mb-4 group-hover:underline decoration-4 decoration-indigo-400"><a href="#">Surviving the Tech Bubble Burst</a></h3>
+            <p class="font-bold mb-6 text-gray-800 flex-grow text-lg">Practical tips for staying relevant when the industry decides to pivot yet again. It's time to build things that last.</p>
+            <div class="flex items-center gap-4 mt-auto pt-6 border-t-4 border-black">
+                <div class="w-14 h-14 bg-red-400 border-2 border-black rounded-full shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-black text-xl">AL</div>
+                <div class="font-black">
+                    <p class="text-lg text-black">Alex Lin</p>
+                    <p class="text-sm text-gray-600">Apr 10, 2026</p>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <!-- Newsletter section -->
+    <div class="mt-24 mb-8 bg-indigo-500 border-4 border-black p-8 md:p-16 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] text-center max-w-4xl mx-auto relative overflow-hidden">
+        <div class="relative z-10">
+            <h2 class="text-4xl md:text-5xl font-black uppercase mb-6 text-white" style="-webkit-text-stroke: 2px black;">Don't Miss Out</h2>
+            <p class="font-bold text-xl mb-10 max-w-lg mx-auto bg-white border-4 border-black p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">Subscribe to our absolutely free, purely chaotic newsletter for the latest updates.</p>
+            <form class="flex flex-col md:flex-row gap-4 justify-center" onsubmit="event.preventDefault();">
+                <input type="email" placeholder="YOUR EMAIL" class="w-full md:w-96 border-4 border-black p-4 font-black uppercase text-xl focus:outline-none focus:ring-4 focus:ring-yellow-300 placeholder-gray-600 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-white">
+                <button type="submit" class="bg-yellow-300 text-black border-4 border-black font-black uppercase text-xl px-10 py-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#000_3px,transparent_3px)] [background-size:24px_24px]"></div>
+    </div>
 {% endblock %}
