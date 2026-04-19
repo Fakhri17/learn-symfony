@@ -1,0 +1,54 @@
+{% extends '_layouts/base.html.twig' %}
+
+{% block title %}{{ blog.title }} - Blog detail{% endblock %}
+
+{% block body %}
+    <article class="max-w-4xl mx-auto">
+        {# Header Area #}
+        <header class="mb-12">
+            <div class="mb-6 flex flex-wrap gap-4 items-center">
+                <span class="bg-pink-300 border-4 border-black px-4 py-1 font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    {{ blog.category.title }}
+                </span>
+                <span class="font-bold uppercase text-sm border-b-2 border-dashed border-black">
+                    🕒 {{ blog.createdAt|date('M d, Y') }}
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-tight mb-8">
+                {{ blog.title }}
+            </h1>
+
+            <div class="flex items-center gap-4 p-4 border-4 border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] inline-flex">
+                <div class="w-12 h-12 bg-indigo-400 border-2 border-black rounded-full flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                    {{ blog.author.name|slice(0, 1) }}
+                </div>
+                <div>
+                    <p class="font-black uppercase text-sm leading-none">{{ blog.author.name }}</p>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase">Author / Contributor</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="mt-8">
+            {# Main Content #}
+            <div>
+                {% if blog.thumbnail %}
+                    <div class="mb-10 border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] bg-black">
+                        <img src="{{ asset('uploads/thumbnails/' ~ blog.thumbnail) }}" alt="{{ blog.title }}" class="w-full h-auto">
+                    </div>
+                {% endif %}
+
+                <div class="prose prose-xl max-w-none font-bold text-gray-900 leading-relaxed">
+                    {{ blog.body|nl2br }}
+                </div>
+                
+                <div class="mt-16 pt-10 border-t-4 border-black">
+                   <a href="{{ path('app_home') }}" class="inline-block bg-yellow-300 border-4 border-black font-black uppercase px-8 py-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all">
+                       ← Back to Home
+                   </a>
+                </div>
+            </div>
+        </div>
+    </article>
+{% endblock %}

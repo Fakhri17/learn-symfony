@@ -162,6 +162,40 @@ Membangun antarmuka admin dengan desain Neobrutalisme yang interaktif dan respon
 
 ---
 
+## 9. Public Blog Detail & Entity Resolution
+Membangun halaman detail blog untuk publik serta menangani pengambilan data otomatis oleh Symfony.
+
+### 🛠️ Controller Implementation: `src/Controller/BlogController.php`
+Gunakan `#[MapEntity]` untuk memastikan Symfony dapat mencari entitas berdasarkan parameter non-ID (seperti `slug`):
+
+```php
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+
+#[Route('/blog/{slug}', name: 'app_blog_detail')]
+public function detail(
+    #[MapEntity(mapping: ['slug' => 'slug'])] 
+    Blog $blog
+): Response {
+    // Logic here...
+}
+```
+
+### 🏮 Penanganan Error Umum
+- **Undefined method `isIsEnable`**: Pastikan nama method getter sesuai dengan properti di entitas. Jika properti adalah `$isEnable`, method defaultnya adalah `isEnable()`, bukan `isIsEnable()`.
+- **Argument Resolving Error**: Jika Symfony gagal menemukan entitas berdasarkan `{slug}`, pastikan telah menggunakan `#[MapEntity]` atau property `slug` sudah ditandai sebagai `unique: true` di entitas.
+
+---
+
+## 10. UI Content Optimization
+Menyesuaikan tata letak untuk fokus pada keterbacaan artikel.
+
+### 🍱 Fokus Konten (Single Column)
+- **Hapus Sidebar**: Menghapus elemen yang mengalihkan perhatian seperti "Newsletter" atau "About Category" pada halaman detail untuk menciptakan pengalaman membaca yang bersih.
+- **Readable Container**: Gunakan container dengan lebar maksimal yang terkontrol (contoh: `max-w-4xl` di Tailwind) agar baris teks tidak terlalu panjang dan melelahkan mata saat dibaca.
+- **Prose Styling**: Manfaatkan plugin `@tailwindcss/typography` (class `prose`) untuk otomatis mengatur tipografi artikel (heading, list, spacing).
+
+---
+
 ## 💡 Tips & Reset
 Jika terjadi kesalahan fatal dan ingin mengulang dari awal (Hard Reset).
 
@@ -176,3 +210,4 @@ del src\Repository\*.php
 
 > [!WARNING]
 > Hati-hati! Perintah di atas akan menghapus semua data dan kode entitas yang sudah dibuat.
+
