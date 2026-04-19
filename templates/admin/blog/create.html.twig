@@ -1,0 +1,121 @@
+{% extends '_layouts/admin.html.twig' %}
+
+{% block title %}Create Blog Post - Admin Panel{% endblock %}
+{% block page_title %}New Blog Post{% endblock %}
+
+{% block body %}
+  {# Top Actions Bar #}
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 pb-6 border-b-4 border-black">
+    <div>
+      <h2 class="text-4xl font-black uppercase tracking-tight">Compose Story</h2>
+      <p class="font-bold text-gray-500 uppercase text-sm italic">Draft your masterpiece for the world to see</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+      <a href="{{ path('admin_blog_index') }}" class="flex-1 md:flex-none text-center bg-white border-4 border-black font-black uppercase px-6 py-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all text-sm">
+        ❌ Cancel
+      </a>
+      <button type="submit" form="create-blog-form" class="flex-[2] md:flex-none bg-lime-400 border-4 border-black font-black uppercase px-10 py-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all text-sm">
+        🚀 Publish Post
+      </button>
+    </div>
+  </div>
+
+  {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'create-blog-form'}}) }}
+  <div class="flex flex-col lg:flex-row gap-0 lg:gap-10 items-start">
+    {# Main Content Card #}
+    <div class="lg:w-2/3 w-full bg-white border-4 border-black p-6 md:p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] mb-10 lg:mb-0">
+      <div class="space-y-8">
+        {{ form_row(form.title) }}
+
+        <div class="bg-indigo-50 border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(99,102,241,0.2)]">
+          {{ form_label(form.thumbnail) }}
+          <div class="flex flex-col md:flex-row items-center gap-10 mt-4">
+            <div id="thumbnail-preview-container" class="hidden">
+              <div class="relative group">
+                <img id="thumbnail-preview" src="#" class="w-48 h-48 object-cover border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                <button type="button" onclick="toggleDeleteThumbnail()" class="absolute -top-4 -right-4 bg-red-500 text-white border-2 border-black w-10 h-10 flex items-center justify-center font-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all" title="Remove image">
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div class="flex-grow w-full space-y-4">
+              <div class="p-4 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <div class="flex items-center justify-between mb-4 pb-2 border-b-2 border-dashed border-black/20">
+                  <span class="text-xs font-black uppercase text-gray-400">Select File</span>
+                </div>
+                {{ form_widget(form.thumbnail, {'attr': {'onchange': 'previewImage(this)', 'class': 'w-full cursor-pointer focus:ring-0', 'id': 'thumbnail-input'}}) }}
+              </div>
+
+              {{ form_help(form.thumbnail) }}
+              {{ form_errors(form.thumbnail) }}
+            </div>
+          </div>
+        </div>
+
+        {{ form_row(form.body) }}
+      </div>
+    </div>
+
+    {# Sidebar Card #}
+    <div class="lg:w-1/3 w-full space-y-10 sticky top-24">
+      <div class="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <h3 class="text-2xl font-black uppercase mb-8 border-b-4 border-black pb-2 flex items-center gap-3">
+          <span class="text-3xl">⚙️</span> Settings
+        </h3>
+
+        {{ form_row(form.slug) }}
+        {{ form_row(form.category) }}
+        {{ form_row(form.status) }}
+
+        <div class="pt-6 border-t-4 border-black mt-8">
+          {{ form_row(form.isEnable) }}
+        </div>
+      </div>
+    </div>
+  </div>
+  {{ form_end(form) }}
+
+  <script>
+    function toggleDeleteThumbnail() {
+      const input = document.querySelector('input[name="blog[thumbnail]"]');
+      const container = document.getElementById('thumbnail-preview-container');
+
+      if (input) {
+        input.value = '';
+      }
+      container.classList.add('hidden');
+    }
+
+    function previewImage(input) {
+      const container = document.getElementById('thumbnail-preview-container');
+      const preview = document.getElementById('thumbnail-preview');
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          container.classList.remove('hidden');
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const titleInput = document.querySelector('input[name="blog[title]"]');
+      const slugInput = document.querySelector('input[name="blog[slug]"]');
+
+      if (titleInput && slugInput) {
+        titleInput.addEventListener('input', function() {
+          slugInput.value = titleInput.value
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        });
+      }
+    });
+  </script>
+{% endblock %}

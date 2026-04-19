@@ -4,7 +4,7 @@
 {% block page_title %}Manage Categories{% endblock %}
 
 {% block body %}
-<div class="mb-10 flex justify-between items-center">
+<div class="mb-10 flex justify-between items-center flex-wrap gap-4">
     <h2 class="text-3xl font-black uppercase tracking-tight">Active Categories</h2>
     <a href="{{ path('admin_category_new') }}" class="bg-yellow-300 border-4 border-black font-black uppercase px-8 py-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all">
         + Add New Category
@@ -18,7 +18,8 @@
 {% endfor %}
 
 <div class="bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
-    <table class="w-full text-left">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
         <thead class="bg-indigo-300 border-b-4 border-black font-black uppercase">
             <tr>
                 <th class="p-6">ID</th>
@@ -53,5 +54,6 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
 </div>
 {% endblock %}

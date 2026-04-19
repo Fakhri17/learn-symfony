@@ -22,11 +22,17 @@
     </head>
     <body class="bg-[#f4f4f0] text-black min-h-screen flex font-['Space_Grotesk']" style="font-family: 'Space Grotesk', sans-serif;">
         
+        <!-- Sidebar Backdrop (Mobile) -->
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
+
         <!-- Sidebar -->
-        <aside class="w-72 bg-white border-r-4 border-black flex flex-col sticky top-0 h-screen overflow-y-auto z-40">
-            <div class="p-6 border-b-4 border-black flex items-center gap-3 bg-yellow-300">
-                <span class="text-3xl">🛠️</span>
-                <h1 class="text-2xl font-black uppercase tracking-tighter">Admin<br>Panel</h1>
+        <aside id="admin-sidebar" class="fixed md:sticky top-0 left-0 w-72 bg-white border-r-4 border-black flex flex-col h-screen overflow-y-auto z-50 transition-transform -translate-x-full md:translate-x-0">
+            <div class="p-6 border-b-4 border-black flex items-center justify-between gap-3 bg-yellow-300">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🛠️</span>
+                    <h1 class="text-2xl font-black uppercase tracking-tighter leading-tight">Admin<br>Panel</h1>
+                </div>
+                <button id="close-sidebar" class="md:hidden p-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">✕</button>
             </div>
             
             <nav class="flex-grow p-6 space-y-4">
@@ -36,7 +42,7 @@
                 </a>
                 
                 <p class="font-black uppercase text-xs text-gray-500 tracking-widest mt-8 mb-2">Content</p>
-                <a href="#" class="flex items-center gap-3 p-3 font-black uppercase text-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
+                <a href="{{ path('admin_blog_index') }}" class="flex items-center gap-3 p-3 font-black uppercase text-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
                     <span>📝</span> All Posts
                 </a>
                 <a href="{{ path('admin_category_index') }}" class="flex items-center gap-3 p-3 font-black uppercase text-lg border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
@@ -58,37 +64,42 @@
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-grow flex flex-col min-h-screen">
+        <div class="flex-grow flex flex-col min-h-screen min-w-0">
             <!-- Navbar -->
-            <header class="h-20 bg-white border-b-4 border-black sticky top-0 flex items-center justify-between px-8 z-30">
+            <header class="h-20 bg-white border-b-4 border-black sticky top-0 flex items-center justify-between px-4 md:px-8 z-30">
                 <div class="flex items-center gap-4">
-                    <button class="md:hidden p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    <button id="open-sidebar" class="md:hidden p-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all">
                         ☰
                     </button>
-                    <h2 class="font-black text-xl uppercase italic">{% block page_title %}Dashboard{% endblock %}</h2>
+                    <h2 class="font-black text-lg md:text-xl uppercase italic truncate">{% block page_title %}Dashboard{% endblock %}</h2>
                 </div>
                 
-                <div class="flex items-center gap-6">
-                    <div class="hidden md:flex flex-col items-end">
-                        <span class="font-black uppercase leading-none">{{ app.user.name }}</span>
-                        <span class="text-xs font-bold text-gray-600 uppercase">Administrator</span>
+                {# Header Actions Block #}
+                <div class="flex-grow flex justify-end mr-6">
+                    {% block header_actions %}{% endblock %}
+                </div>
+                
+                <div class="flex items-center gap-3 md:gap-6">
+                    <div class="hidden sm:flex flex-col items-end">
+                        <span class="font-black uppercase leading-none text-sm md:text-base">{{ app.user.name }}</span>
+                        <span class="text-[10px] md:text-xs font-bold text-gray-600 uppercase">Administrator</span>
                     </div>
-                    <div class="w-12 h-12 bg-lime-300 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-black text-xl uppercase">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-lime-300 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center font-black text-lg md:text-xl uppercase">
                         {{ app.user.name|slice(0, 1) }}
                     </div>
-                    <a href="{{ path('admin_logout') }}" class="bg-pink-400 border-2 border-black font-black uppercase px-4 py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all text-sm">
+                    <a href="{{ path('admin_logout') }}" class="hidden xs:block bg-pink-400 border-2 border-black font-black uppercase px-3 py-1.5 md:px-4 md:py-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all text-xs md:text-sm">
                         Logout
                     </a>
                 </div>
             </header>
 
             <!-- Page Content -->
-            <main class="p-8 flex-grow">
+            <main class="p-4 md:p-8 flex-grow overflow-x-hidden">
                 {% block body %}{% endblock %}
             </main>
 
             <!-- Admin Footer -->
-            <footer class="p-6 border-t-4 border-black bg-white flex justify-between items-center text-sm font-bold uppercase">
+            <footer class="p-6 border-t-4 border-black bg-white flex flex-col md:flex-row justify-between items-center gap-4 text-xs md:text-sm font-bold uppercase text-center md:text-left">
                 <p>© {{ 'now'|date('Y') }} Admin Panel v1.0</p>
                 <div class="flex gap-4">
                     <a href="#" class="hover:underline">Documentation</a>
@@ -96,5 +107,24 @@
                 </div>
             </footer>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const sidebar = document.getElementById('admin-sidebar');
+                const backdrop = document.getElementById('sidebar-backdrop');
+                const openBtn = document.getElementById('open-sidebar');
+                const closeBtn = document.getElementById('close-sidebar');
+
+                function toggleSidebar() {
+                    sidebar.classList.toggle('-translate-x-full');
+                    backdrop.classList.toggle('hidden');
+                    document.body.classList.toggle('overflow-hidden');
+                }
+
+                openBtn.addEventListener('click', toggleSidebar);
+                closeBtn.addEventListener('click', toggleSidebar);
+                backdrop.addEventListener('click', toggleSidebar);
+            });
+        </script>
     </body>
 </html>

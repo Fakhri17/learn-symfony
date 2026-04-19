@@ -131,6 +131,37 @@ Buat form login yang mengirimkan `email`, `password`, dan `_csrf_token`.
 
 ---
 
+## 8. Admin Blog Management (Neobrutalism UI)
+Membangun antarmuka admin dengan desain Neobrutalisme yang interaktif dan responsif.
+
+### 🍱 Layout Styling
+- **Two-Card Layout**: Pisahkan konten utama (Judul, Body, Thumbnail) dengan sidebar konfigurasi (Slug, Kategori, Status).
+- **Header Actions**: Letakkan tombol aksi utama (Cancel, Publish/Save, Delete) di bagian atas halaman (Top Actions Bar) untuk aksesibilitas yang lebih baik.
+- **Responsive Navigation**: Implementasikan sidebar yang dapat disembunyikan (*collapsible*) pada perangkat mobile menggunakan hamburger menu.
+
+### ⚡ JavaScript Interactivity
+1. **Real-time Slug Sync**:
+   Otomatis men-generate slug dari judul saat pengguna mengetik:
+   ```javascript
+   titleInput.addEventListener('input', () => {
+       slugInput.value = titleInput.value.toLowerCase()
+           .replace(/[^\w\s-]/g, '')
+           .replace(/[\s_-]+/g, '-')
+           .replace(/^-+|-+$/g, '');
+   });
+   ```
+
+2. **Smart Image Management**:
+   - **Live Preview**: Gunakan `FileReader` untuk menampilkan pratinjau gambar sesaat setelah file dipilih tanpa perlu merefresh halaman.
+   - **Interactive Delete (X Button)**: Mengganti checkbox tradisional dengan ikon "✕" langsung pada gambar. Jika diklik, pratinjau akan hilang dan input file dibersihkan.
+   - **Filename Display**: Tampilkan nama file yang sedang aktif di database menggunakan badge khusus agar user tahu file mana yang tersimpan.
+
+### 🛠️ Backend Implementation
+- **Form Component**: Tambahkan field `delete_thumbnail` (CheckboxType) yang tidak dipetakan ke entitas (*mapped: false*) untuk menangani logika penghapusan file fisik.
+- **Controller Logic**: Di dalam method `edit()`, cek status `delete_thumbnail`. Jika `true`, hapus file fisik dari disk dan set field `thumbnail` di database menjadi `null`.
+
+---
+
 ## 💡 Tips & Reset
 Jika terjadi kesalahan fatal dan ingin mengulang dari awal (Hard Reset).
 
