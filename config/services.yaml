@@ -26,3 +26,7 @@ services:
     App\Service\StockData\YahooFinanceDebugService:
         arguments:
             $contextCache: '@yahoo_finance.cache'
+
+    App\Service\StockData\YahooFinanceProvider:
+        arguments:
+            $contextCache: '@yahoo_finance.cache'

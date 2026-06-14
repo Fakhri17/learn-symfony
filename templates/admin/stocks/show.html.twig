@@ -1,0 +1,49 @@
+{% extends '_layouts/admin.html.twig' %}
+
+{% block title %}{{ code }} Stock Detail - Admin Panel{% endblock %}
+{% block page_title %}Stock Detail / {{ code }}{% endblock %}
+{% block header_actions %}<a href="{{ path('admin_stocks_index') }}" class="border-2 border-black bg-white px-4 py-2 text-xs font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none">Back to Stocks</a>{% endblock %}
+
+{% block body %}
+    {% set statusClass = row.status == 'success' ? 'bg-lime-400' : (row.status == 'partial' ? 'bg-yellow-300' : (row.status == 'pending' ? 'bg-gray-300' : 'bg-red-400')) %}
+    <div class="mb-8 border-4 border-black bg-indigo-300 p-6 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] md:p-8">
+        <div class="flex flex-wrap items-start justify-between gap-6">
+            <div><p class="text-xs font-black uppercase tracking-[0.25em]">{{ row.company ? row.company.name : 'Stock Snapshot' }}</p><h1 class="mt-2 text-5xl font-black uppercase tracking-tighter md:text-7xl">{{ code }}</h1><p class="mt-2 font-mono font-bold">{{ row.ticker ?: 'Ticker unavailable' }} / {{ row.source }}</p></div>
+            <div class="border-4 border-black bg-white p-5 text-right shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"><p class="text-xs font-black uppercase text-gray-500">Latest Price</p><p class="text-3xl font-black md:text-5xl">{{ row.price is not null ? row.price|number_format(2, '.', ',') : 'N/A' }}</p><span class="{{ statusClass }} mt-3 inline-block border-2 border-black px-3 py-1 text-xs font-black uppercase">{{ row.status }}</span></div>
+        </div>
+    </div>
+
+    <form method="get" class="mb-8 grid gap-4 border-4 border-black bg-white p-5 shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] md:grid-cols-3">
+        <label><span class="mb-2 block text-xs font-black uppercase">Status</span><select name="status" class="w-full border-2 border-black bg-[#f4f4f0] px-4 py-3 font-bold"><option value="">All statuses</option>{% for status in ['success', 'partial', 'failed', 'pending'] %}<option value="{{ status }}" {% if filters.status == status %}selected{% endif %}>{{ status|title }}</option>{% endfor %}</select></label>
+        <label><span class="mb-2 block text-xs font-black uppercase">Source</span><input type="text" name="source" value="{{ filters.source }}" placeholder="yahoo_finance" class="w-full border-2 border-black bg-[#f4f4f0] px-4 py-3 font-bold"></label>
+        <div class="flex items-end gap-3"><button class="flex-1 cursor-pointer border-2 border-black bg-yellow-300 px-4 py-3 font-black uppercase shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">Filter History</button><a href="{{ path('admin_stocks_show', {code: code}) }}" class="border-2 border-black bg-white px-4 py-3 font-black uppercase">Reset</a></div>
+    </form>
+
+    <div class="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {% set metrics = [['Open', row.openPrice], ['High', row.highPrice], ['Low', row.lowPrice], ['Volume', row.volume]] %}
+        {% for metric in metrics %}<div class="border-4 border-black bg-white p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"><p class="text-xs font-black uppercase text-gray-500">{{ metric[0] }}</p><p class="mt-2 break-all text-2xl font-black">{{ metric[1] is not null ? metric[1] : 'N/A' }}</p></div>{% endfor %}
+    </div>
+
+    <div class="mb-8 grid gap-8 xl:grid-cols-3">
+        <section class="border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] xl:col-span-2">
+            <h2 class="border-b-4 border-black bg-lime-300 p-5 text-xl font-black uppercase">Snapshot Information</h2>
+            <div class="grid divide-y-2 divide-black font-bold md:grid-cols-2 md:divide-x-2 md:divide-y-0">
+                <dl class="divide-y-2 divide-black"><div class="flex justify-between gap-4 p-4"><dt>Currency</dt><dd>{{ row.currency ?: 'N/A' }}</dd></div><div class="flex justify-between gap-4 p-4"><dt>PE Ratio</dt><dd>{{ row.peRatio is not null ? row.peRatio : 'N/A' }}</dd></div><div class="flex justify-between gap-4 p-4"><dt>EPS</dt><dd>{{ row.eps is not null ? row.eps : 'N/A' }}</dd></div><div class="flex justify-between gap-4 p-4"><dt>Market Cap</dt><dd>{{ row.marketCap is not null ? row.marketCap : 'N/A' }}</dd></div></dl>
+                <dl class="divide-y-2 divide-black"><div class="flex justify-between gap-4 p-4"><dt>Market Time</dt><dd>{{ row.marketTime ? row.marketTime|date('d M Y H:i:s') : 'N/A' }}</dd></div><div class="flex justify-between gap-4 p-4"><dt>Fetched At</dt><dd>{{ row.fetchedAt ? row.fetchedAt|date('d M Y H:i:s') : 'N/A' }}</dd></div><div class="flex justify-between gap-4 p-4"><dt>Company Code</dt><dd>{{ row.company ? row.company.code : 'N/A' }}</dd></div><div class="flex justify-between gap-4 p-4"><dt>Record ID</dt><dd>#{{ row.id }}</dd></div></dl>
+            </div>
+        </section>
+        <div class="space-y-8">
+            <section class="border-4 border-black bg-yellow-100 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"><h2 class="border-b-4 border-black bg-yellow-300 p-4 text-lg font-black uppercase">Missing Fields</h2><div class="p-5 font-bold">{% if row.missingFields %}<ul class="space-y-2">{% for field in row.missingFields %}<li class="border-2 border-black bg-white px-3 py-2">{{ field }}</li>{% endfor %}</ul>{% else %}<p>No missing fields.</p>{% endif %}</div></section>
+            <section class="border-4 border-black bg-red-100 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"><h2 class="border-b-4 border-black bg-red-400 p-4 text-lg font-black uppercase">Error</h2><div class="break-words p-5 font-mono text-sm font-bold">{{ row.errorMessage ?: 'No synchronization error.' }}</div></section>
+        </div>
+    </div>
+
+    <section class="mb-8 overflow-hidden border-4 border-black bg-white shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
+        <h2 class="border-b-4 border-black bg-pink-300 p-5 text-xl font-black uppercase">Recent History</h2>
+        <div class="overflow-x-auto"><table class="w-full min-w-[850px] border-collapse text-left"><thead class="border-b-4 border-black bg-gray-200 text-xs font-black uppercase"><tr><th class="p-4">Fetched At</th><th class="p-4">Price</th><th class="p-4">Volume</th><th class="p-4">Source</th><th class="p-4">Status</th><th class="p-4">Issue</th></tr></thead><tbody class="divide-y-2 divide-black font-bold">
+            {% for historyRow in history_rows %}{% set historyStatusClass = historyRow.status == 'success' ? 'bg-lime-400' : (historyRow.status == 'partial' ? 'bg-yellow-300' : (historyRow.status == 'pending' ? 'bg-gray-300' : 'bg-red-400')) %}<tr><td class="p-4">{{ historyRow.fetchedAt ? historyRow.fetchedAt|date('d M Y H:i:s') : 'N/A' }}</td><td class="p-4">{{ historyRow.price is not null ? historyRow.price|number_format(2, '.', ',') : 'N/A' }}</td><td class="p-4 font-mono text-sm">{{ historyRow.volume ?: 'N/A' }}</td><td class="p-4">{{ historyRow.source }}</td><td class="p-4"><span class="{{ historyStatusClass }} border-2 border-black px-2 py-1 text-xs font-black uppercase">{{ historyRow.status }}</span></td><td class="max-w-xs p-4 text-sm">{{ historyRow.errorMessage ?: (historyRow.missingFields ? historyRow.missingFields|join(', ') : '-') }}</td></tr>{% else %}<tr><td colspan="6" class="p-12 text-center font-black uppercase text-gray-400">No history found.</td></tr>{% endfor %}
+        </tbody></table></div>
+    </section>
+
+    <details class="border-4 border-black bg-gray-950 text-white shadow-[8px_8px_0px_0px_rgba(99,102,241,1)]"><summary class="cursor-pointer border-b-4 border-black bg-indigo-400 p-5 font-black uppercase text-black">Raw Provider Payload</summary><pre class="overflow-x-auto whitespace-pre-wrap break-words p-5 text-xs text-lime-300">{{ raw_payload_json }}</pre></details>
+{% endblock %}
